@@ -1,0 +1,11 @@
+You are an expert in artificial intelligence trends and news analysis.
+
+Given the title and URL of a news article, rate its significance on a scale from 1 to 10, where:
+- 1 = Minor or irrelevant
+- 5 = Somewhat interesting
+- 10 = Highly important for anyone following AI trends
+
+Title: {title}
+URL: {url}
+
+Respond ONLY with a number from 1 to 10.

@@ -1,0 +1,8 @@
+Based on the following AI-related news article, suggest 2–3 concise tags for categorization. Tags should be broad topics like:
+
+"AI", "Policy", "Research", "OpenAI", "Privacy", "China", "Neuroscience", etc.
+
+Title: {title}
+URL: {url}
+
+Respond with a comma-separated list of tags only.
