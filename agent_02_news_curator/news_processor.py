@@ -12,6 +12,31 @@ def load_prompt(filename, **kwargs):
         print(f"[NewsProcessor] Failed to load prompt '{filename}': {e}")
         return ""
 
+def should_summarize(title, url):
+    """Uses GPT to decide if this URL is likely a real article."""
+    check_prompt = f"""
+You're an AI assistant evaluating whether this page is likely a standalone news article.
+
+Title: {title}
+URL: {url}
+
+If this page appears to be a category, topic, homepage, or a collection page, reply with "NO".
+If it appears to be a valid standalone news article with substantive content, reply with "YES".
+"""
+
+    try:
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[{"role": "user", "content": check_prompt}],
+            temperature=0
+        )
+        result = response.choices[0].message.content.strip().lower()
+        return result.startswith("yes")
+
+    except Exception as e:
+        print(f"[NewsProcessor] Error in should_summarize(): {e}")
+        return False
+
 def process_story(story):
     try:
         context = {
@@ -19,7 +44,26 @@ def process_story(story):
             "url": story["url"]
         }
 
-        # Step 1 – Significance
+        # Step 0 – GPT check for valid article type
+        if not should_summarize(context["title"], context["url"]):
+            print(f"[NewsProcessor] Skipping non-article: {context['url']}")
+            return None
+
+        # Step 1 – Summarization first (before significance)
+        summarize_prompt = load_prompt("summarize_prompt.txt", **context)
+        summary_response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[{"role": "user", "content": summarize_prompt}],
+            temperature=0.7
+        )
+        summary = summary_response.choices[0].message.content.strip()
+
+        # 🚨 HARD CHECK – Don't proceed if summary is invalid
+        if summary.lower().startswith("not a valid article"):
+            print(f"[NewsProcessor] Skipping fake summary for: {story['url']}")
+            return None
+
+        # Step 2 – Significance scoring
         significance_prompt = load_prompt("significance_prompt.txt", **context)
         sig_response = client.chat.completions.create(
             model="gpt-3.5-turbo",
@@ -30,16 +74,8 @@ def process_story(story):
         significance_score = float(score_str)
 
         if significance_score < 6:
+            print(f"[NewsProcessor] Skipping low-significance story: {context['title']} ({significance_score})")
             return None
-
-        # Step 2 – Summarization
-        summarize_prompt = load_prompt("summarize_prompt.txt", **context)
-        summary_response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=[{"role": "user", "content": summarize_prompt}],
-            temperature=0.7
-        )
-        summary = summary_response.choices[0].message.content.strip()
 
         # Step 3 – Tagging
         tagging_prompt = load_prompt("tagging_prompt.txt", **context)
