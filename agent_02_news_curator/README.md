@@ -1,7 +1,3 @@
-Awesome — here's a professional, GitHub-ready `README.md` tailored for your **Agent 02 – Smart News Curator**, built for Raspberry Pi 5 (or any Debian-based system), using Tavily + OpenAI.
-
-You can copy this into your project root as:
-
 ```bash
 nano README.md
 ```
