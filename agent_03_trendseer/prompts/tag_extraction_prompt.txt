@@ -1,0 +1,6 @@
+Generate 3 to 5 short tags that represent the main topics of this summary. Tags should be:
+- Relevant to technology, AI, or geopolitical context
+- Capitalized and separated by commas
+
+Summary:
+{SUMMARY_TEXT}

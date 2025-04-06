@@ -1,0 +1,4 @@
+Compare these summaries from the past 3 days. Identify any new or escalating topics.
+
+Summaries:
+{SUMMARIES_TEXT}

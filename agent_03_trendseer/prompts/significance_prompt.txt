@@ -1,0 +1,4 @@
+Evaluate the following summary for strategic significance. Is this a high-impact development or a routine update? Explain briefly in 2–3 sentences.
+
+Summary:
+{SUMMARY_TEXT}

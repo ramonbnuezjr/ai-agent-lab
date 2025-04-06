@@ -1,0 +1,8 @@
+Summarize the following article in 4 concise, well-written paragraphs. Focus on:
+- The main topic or announcement
+- Any strategic implications or developments
+- Who it affects and why it matters
+- What questions are note being asked, that should be
+
+Article:
+{ARTICLE_TEXT}
