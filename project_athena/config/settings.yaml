@@ -1,0 +1,4 @@
+llm:
+  provider: "ollama"
+  model: "mistral"
+  host: "http://192.168.7.253:11434"
